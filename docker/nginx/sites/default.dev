@@ -1,0 +1,35 @@
+server {
+    listen 80;
+    server_name default.dev;
+    root "/var/www/public";
+
+    index index.php;
+    client_max_body_size 100m;
+    fastcgi_read_timeout 1800;
+    sendfile off;
+
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; expires max;}
+    location = /robots.txt  { access_log off; log_not_found off; expires max;}
+
+    access_log off;
+    error_log  /var/log/nginx/default.dev-error.log error;
+
+
+    location ~ \.php$ {
+        try_files     $uri =404;
+        include       fastcgi_params;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_pass  127.0.0.1:9000;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}

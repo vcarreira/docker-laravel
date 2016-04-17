@@ -1,0 +1,119 @@
+version: '2'
+# ************ README ****************
+# Reads env vars from .env
+# Requires docker-compose version 1.7+
+# ************************************
+
+services:
+  nginx:
+    container_name: ${APP_NAME}-httpd
+    image: vcarreira/nginx-php5-fpm
+    ports:
+      - 80:80
+    volumes:
+      - ./project:/var/www
+      - ./docker/nginx/sites:/etc/nginx/sites-enabled
+      - ./docker/nginx/logs:/var/log/nginx/
+    links:
+      - mysql:${DB_HOST}
+      - redis:${REDIS_HOST}
+    networks:
+      - laravel-network
+
+  mysql:
+    container_name: ${APP_NAME}-db
+    image: mysql
+    expose:
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=type-a-db-root-password
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - /docker-server/${APP_NAME}-db:/var/lib/mysql
+    networks:
+      - laravel-network
+
+  redis:
+    container_name: ${APP_NAME}-redis
+    image: vcarreira/redis
+    expose:
+      - 6379
+    environment:
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    command: redis-server --appendonly yes
+    volumes:
+      - ./docker/redis:/data
+    networks:
+      - laravel-network
+
+  mysql-backup:
+    container_name: ${APP_NAME}-db-cron-backup
+    environment:
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+    build:
+      context: ./docker/osx
+      dockerfile: mysqldump-cron.dockerfile
+    volumes:
+      - ./docker/db-backups:/mysql-backups
+    links:
+      - mysql:${DB_HOST}
+    networks:
+      - laravel-network
+
+  # one-off containers
+  # call docker-compose rm -a -f after docker-compose up to remove all one-off containers
+  # or simply use the alias dcup
+  artisan:
+    image: vcarreira/artisan
+    volumes:
+      - ./project:/var/www
+    links:
+      - mysql:${DB_HOST}
+      - redis:${REDIS_HOST}
+    networks:
+      - laravel-network
+
+  phpunit:
+    image: vcarreira/phpunit
+    volumes:
+      - ./project:/var/www
+    links:
+      - mysql:${DB_HOST}
+      - redis:${REDIS_HOST}
+    networks:
+      - laravel-network
+
+  phpspec:
+    image: vcarreira/phpspec
+    volumes:
+      - ./project:/var/www
+    links:
+      - mysql:${DB_HOST}
+      - redis:${REDIS_HOST}
+    networks:
+      - laravel-network
+
+  composer:
+    image: vcarreira/composer
+    volumes:
+      - ./project:/var/www
+    networks:
+      - laravel-network
+
+  node:
+    image: vcarreira/node
+    volumes:
+      - ./project:/var/www
+    networks:
+      - laravel-network
+
+networks:
+  laravel-network:
+    driver: bridge
