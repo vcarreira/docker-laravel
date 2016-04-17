@@ -27,13 +27,13 @@ Before proceeding make sure you have ```docker```, ```docker-compose``` **versio
     - point the Compose ```.env``` file to the one provided by Laravel
  - Open ```.env``` file and update the ```APP_NAME```, ```MYSQL_ROOT_PASSWORD``` and other settings related with the services provided by this docker container
 
-Important notes:
+**Important notes:**
 
   - Version 1.7 or greater of ```docker-compose``` is required because the Compose file reads environment variables from the .env file
   - All containers assume that ```./project``` folder is the root folder of the Laravel project
   - The nginx container loads the site(s) definition(s) from folder ```./docker/nginx/sites```. A sample site is provided
   - The nginx container stores all logs on folder ```./docker/nginx/logs```
-  - The redis container is configured with persistence enabled. Databases are stored on folder ```./docker/redis```
+  - The redis container is configured with persistence enabled. Redis databases are stored on folder ```./docker/redis```
   - Due to file permissions issues on OSX, the mysql container maps the ```/var/lib/mysql``` folder to the ```/docker-server/${APP_NAME}-db``` on the docker machine. Because database data can be lost if the docker machine is restarted or deleted, a container called ```mysql-backup``` is provided to backup the database each 15m. Every 15m the ```mysql-backup``` container creates a backup of the database and places it inside the folder ```./docker/db-backups```
 
 ## Launching the containers
