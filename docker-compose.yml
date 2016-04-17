@@ -67,6 +67,22 @@ services:
     networks:
       - laravel-network
 
+  adminer:
+    container_name: ${APP_NAME}-adminer
+    build:
+      context: ./docker/adminer
+      dockerfile: adminer.dockerfile
+    ports:
+      - 81:80
+    volumes:
+      - ./docker/adminer/sites:/etc/nginx/sites-enabled
+      - ./docker/adminer/www:/var/www
+      - ./docker/nginx/logs:/var/log/nginx/
+    links:
+      - mysql:${DB_HOST}
+    networks:
+      - laravel-network
+
   # one-off containers
   # call docker-compose rm -a -f after docker-compose up to remove all one-off containers
   # or simply use the alias dcup
