@@ -7,6 +7,7 @@ The Compose file provides the following services:
   - Redis container [vcarreira/redis](https://registry.hub.docker.com/u/vcarreira/redis)
   - Official MySQL container
   - Built-in MySQL backup container
+  - Built-in Adminer container
 
 The following one-off containers are provided for the common Laravel tasks:
 
@@ -94,6 +95,13 @@ To run such container type:
 docker-compose up -d mysql-backup
 ```
 
+### Adminer container
+The Composer file provides a container to run [Adminer](https://www.adminer.org/). To create the Adminer container just type:
+
+```
+docker-compose up -d adminer
+```
+
 ### Required configuration for Redis
 The following variables are required to configure/access the Redis service container:
 
@@ -110,7 +118,13 @@ REDIS_PORT=6379
 REDIS_PASSWORD=null
 ```
 
-Because the image contains the PECL redis driver, in Laravel 5.2 you must change the redis namespace to avoid conflicts. Change /config/app.php, and replace:
+Before using the redis container you must install the predis package:
+
+```
+dc-composer require predis/predis
+```
+
+Because the image contains the PECL redis driver, in Laravel 5.2 you must change the redis namespace to avoid conflicts. Change ```/config/app.php```, and replace:
 
 ```
 'Redis'     => Illuminate\Support\Facades\Redis::class,
