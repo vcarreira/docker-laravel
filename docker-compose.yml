@@ -63,9 +63,9 @@ services:
       dockerfile: mysqldump-cron.dockerfile
     volumes:
       - ./docker/db-backups:/mysql-backups
+      - /docker-server/${APP_NAME}-db:/var/lib/mysql
     links:
       - mysql:${DB_HOST}
-      - /docker-server/${APP_NAME}-db:/var/lib/mysql
     networks:
       - laravel-network
 
@@ -86,7 +86,7 @@ services:
       - laravel-network
 
   queue-daemon:
-    container_name: ${APP_NAME}-queue-listen
+    container_name: ${APP_NAME}-queue-daemon
     build:
       context: ./docker/laravel-queue
       dockerfile: laravel-queue.dockerfile
