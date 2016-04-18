@@ -102,6 +102,8 @@ The Composer file provides a container to run [Adminer](https://www.adminer.org/
 docker-compose up -d adminer
 ```
 
+Adminer endpoint is exposed at *port 81*.
+
 ### Required configuration for Redis
 The following variables are required to configure/access the Redis service container:
 
@@ -146,6 +148,33 @@ $value = $redis->get('somekey');
 ## Size
 
 To provide consistency all images (except the official ones) are based on debian:jessie. All PHP related containers are based on the same [PHP 5 container](https://registry.hub.docker.com/u/vcarreira/php5). The rational behind this is to guarantee that the development and test environment are the same as the one used for the Nginx container.
+
+Size of each image:
+```
+dockerlaravel_adminer      520.6 MB
+vcarreira/nginx-php5-fpm   520.6 MB
+vcarreira/redis            177.6 MB
+```
+
+Size of each container after ```dc-up``` command:
+```
+NAMES               SIZE
+laravel-adminer     965 B (virtual 520.6 MB)
+laravel-httpd       965 B (virtual 520.6 MB)
+laravel-redis       0 B (virtual 177.6 MB)
+laravel-db          4 B (virtual 374.1 MB)
+```
+
+## Related images
+
+  - [vcarreira/nginx-php5-fpm](https://registry.hub.docker.com/u/vcarreira/nginx-php5-fpm)
+  - [vcarreira/redis](https://registry.hub.docker.com/u/vcarreira/redis)
+  - [vcarreira/composer](https://registry.hub.docker.com/u/vcarreira/composer)
+  - [vcarreira/artisan](https://registry.hub.docker.com/u/vcarreira/artisan)
+  - [vcarreira/node](https://registry.hub.docker.com/u/vcarreira/node)
+  - [vcarreira/phpspec](https://registry.hub.docker.com/u/vcarreira/phpspec)
+  - [vcarreira/phpunit](https://registry.hub.docker.com/u/vcarreira/phpunit)
+
 
 ## Credits
 Must of this work is based on:
