@@ -17,7 +17,7 @@ server {
     location = /robots.txt  { access_log off; log_not_found off; expires max;}
 
     access_log off;
-    error_log  /var/log/nginx/default.dev-error.log error;
+    error_log  /var/log/nginx/adminer.dev-error.log error;
 
 
     location ~ \.php$ {

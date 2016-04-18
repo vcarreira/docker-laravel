@@ -49,6 +49,7 @@ services:
     networks:
       - laravel-network
 
+  # built-in containers
   mysql-backup:
     container_name: ${APP_NAME}-db-cron-backup
     environment:
@@ -64,6 +65,7 @@ services:
       - ./docker/db-backups:/mysql-backups
     links:
       - mysql:${DB_HOST}
+      - /docker-server/${APP_NAME}-db:/var/lib/mysql
     networks:
       - laravel-network
 
@@ -80,6 +82,20 @@ services:
       - ./docker/nginx/logs:/var/log/nginx/
     links:
       - mysql:${DB_HOST}
+    networks:
+      - laravel-network
+
+  queue-daemon:
+    container_name: ${APP_NAME}-queue-listen
+    build:
+      context: ./docker/laravel-queue
+      dockerfile: laravel-queue.dockerfile
+    volumes:
+      - ./project:/var/www
+      - ./docker/laravel-queue/logs:/var/log/supervisor
+    links:
+      - mysql:${DB_HOST}
+      - redis:${REDIS_HOST}
     networks:
       - laravel-network
 

@@ -10,3 +10,7 @@ alias dc-node="docker-compose run --rm node node"
 alias dc-gulp="docker-compose run --rm node gulp"
 alias dc-npm="docker-compose run --rm node npm"
 alias dc-bower="docker-compose run --rm node bower"
+
+alias dc-backup="docker compose -up -d mysql-backup"
+alias dc-adminer="docker compose -up -d adminer"
+alias dc-queue="docker compose -up -d queue-daemon"
