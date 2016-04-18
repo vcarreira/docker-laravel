@@ -8,6 +8,7 @@ The Compose file provides the following services:
   - Official MySQL container
   - Built-in MySQL backup container
   - Built-in Adminer container
+  - Built-in queue:listen daemon
 
 The following one-off containers are provided for the common Laravel tasks:
 
@@ -60,8 +61,15 @@ To run common tasks use the following aliases:
  - ```dc-phpspec``` - to run phpspec
  - ```dc-node``` - to run a generic node command
  - ```dc-gulp``` - to run gulp (e.g. ```dc-gulp watch```)
- - ```dc-npm``` - to run (e.g ```dc-npm install```)
- - ```dc-bower``` - to run (e.g. ```dc-bower install desandro/masonry```)
+ - ```dc-npm``` - to run npm (e.g ```dc-npm install```)
+ - ```dc-bower``` - to run (e.g. ```dc-bower install desandro/masonry```) bower
+
+
+ The following aliases are provided to launch the extra-containers:
+
+ - ```dc-backup``` - to launch the MySQL backup container
+ - ```dc-adminer``` - to launch the adminer container
+ - ```dc-queue``` - to launch the queue:listen daemon container
 
 ## Configuration environment variables
 Hostnames are based on the ```APP_NAME``` variable (defaults to laravel). If you change the ```APP_NAME``` to another value, you must change the ```DB_HOST``` and ```DB_REDIS``` accordingly.
@@ -92,14 +100,14 @@ When docker is running inside a vm like the one provided by docker machine, in O
 
 To run such container type:
 ```
-docker-compose up -d mysql-backup
+dc-backup
 ```
 
 ### Adminer container
-The Composer file provides a container to run [Adminer](https://www.adminer.org/). To create the Adminer container just type:
+The Composer file provides a container to run [Adminer](https://www.adminer.org/). To launch the Adminer container just type:
 
 ```
-docker-compose up -d adminer
+dc-adminer
 ```
 
 Adminer endpoint is exposed at *port 81*.
@@ -144,6 +152,14 @@ Use it like this:
 $redis = RedisL5::connection();
 $value = $redis->get('somekey');
 ```
+
+### Queue daemon container
+The Composer file provides a container to run the ```queue:listen``` artisan command monitor by the supervisor process. To launch the  ```queue:listen``` daemon type:
+
+```
+dc-queue
+```
+
 
 ## Size
 
