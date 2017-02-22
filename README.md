@@ -22,7 +22,7 @@ The following one-off containers are provided for the common Laravel tasks:
 Before proceeding make sure you have ```docker```, ```docker-compose``` **version 1.7+** installed. Next:
 
  - Clone this repo: ```git clone https://github.com/vcarreira/docker-laravel.git```
- - Add the ```docker-laravel-alias.sh``` to your shell or for the current terminal type: ```source docker-laravel-alias.sh```
+ - Add the ```docker-laravel-aliases.sh``` to your shell or for the current terminal type: ```source docker-laravel-aliases.sh```
  - Setup a Laravel project by typing ```sh setup-project.sh```. This script will:
     - create a new Laravel project inside folder ```./project```
     - add two entries (```APP_NAME``` and ```MYSQL_ROOT_PASSWORD```) to Laravel's ```.env``` file
